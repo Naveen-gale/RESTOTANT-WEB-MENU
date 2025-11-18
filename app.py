@@ -12,16 +12,34 @@ app = Flask(__name__)
 
 
 # --- FIREBASE SETUP USING ENV VARIABLE ---
-FIREBASE_KEY_PATH = "/app/firebase_key.json"  # Railway will store this
-REALTIME_DB_URL = os.environ.get("REALTIME_DB_URL")
+import os
+import json
+import tempfile
+import firebase_admin
+from firebase_admin import credentials, firestore, db
 
-cred = credentials.Certificate(FIREBASE_KEY_PATH)
+# --- FIREBASE USING ENV VARIABLE ---
+firebase_json = os.environ.get("FIREBASE_KEY")
+
+if not firebase_json:
+    raise Exception("FIREBASE_KEY not found in environment variables")
+
+# Load JSON string as dict
+firebase_dict = json.loads(firebase_json)
+
+# Create a temporary file for firebase key
+with tempfile.NamedTemporaryFile(delete=False, suffix=".json", mode="w") as temp:
+    json.dump(firebase_dict, temp)
+    temp_key_path = temp.name
+
+cred = credentials.Certificate(temp_key_path)
 
 firebase_admin.initialize_app(cred, {
-    "databaseURL": REALTIME_DB_URL
+    "databaseURL": os.environ.get("REALTIME_DB_URL")
 })
 
 firestore_db = firestore.client()
+
 
 # --- GMAIL SETTINGS FROM ENV VARIABLES ---
 app.config["MAIL_SERVER"] = "smtp.gmail.com"
