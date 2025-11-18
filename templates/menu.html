@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Menu |karanatak F C|</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/menu.css') }}">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+
+<body>
+  <!-- HEADER -->
+  <header class="navbar">
+    <div class="logo">
+      <span class="emoji">🍴</span>
+      <span class="name">Karanatak <b>F C</b></span>
+    </div>
+
+    <nav class="nav-links">
+      <a href="/" class="{% if active_page == 'home' %}active{% endif %}">Home</a>
+      <a href="/menu" class="{% if active_page == 'menu' %}active{% endif %}">Menu</a>
+      <a href="/contact" class="{% if active_page == 'contact' %}active{% endif %}">Contact</a>
+    </nav>
+
+    <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+  </header>
+
+  <!-- MAIN -->
+  <main>
+    <section class="intro">
+      <h2>Our Menu</h2>
+      <p>Explore authentic Karnataka dishes — rate your favorite and share your review ❤️</p>
+      <input type="text" id="searchBar" placeholder="🔍 Search for dishes..." onkeyup="searchFood()">
+    </section>
+
+    <!-- ===== MENU SECTIONS ===== -->
+    {% for category, items in menu_data.items() %}
+    <section class="menu-section">
+      <h3 class="category-title">{{ category }}</h3>
+
+      <div class="food-list">
+        {% for item in items %}
+        <div class="food-card" data-name="{{ item.name }}">
+          <div class="img-container">
+            <img src="{{ url_for('static', filename='images/' + item.img) }}" alt="{{ item.name }}">
+          </div>
+
+          <div class="details">
+            <h4>{{ item.name }}</h4>
+            <p>{{ item.desc }}</p>
+            <p class="price">₹{{ item.price }}</p>
+
+            {% set avg = avg_ratings.get(item.name, 0) %}
+            {% if avg > 0 %}
+              <p class="avg-rating">⭐ {{ avg }}</p>
+            {% else %}
+              <p class="avg-rating">⭐ No ratings yet</p>
+            {% endif %}
+
+            <button class="comment-btn" onclick="goToComment('{{ item.name }}')">
+              <i class="fa-solid fa-comment"></i> Add Comment
+            </button>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </section>
+    {% endfor %}
+
+    <!-- Scroll-to-top button -->
+    <button id="scrollTopBtn" title="Go to top">
+      <i class="fa-solid fa-arrow-up"></i>
+    </button>
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>© 2025 Kannada F.C | Taste of Karnataka</p>
+  </footer>
+
+  <!-- JS -->
+  <script>
+    function toggleMenu() {
+      document.querySelector('.nav-links').classList.toggle('show');
+    }
+
+    function goToComment(itemName) {
+      window.location.href = "/comment?item=" + encodeURIComponent(itemName);
+    }
+
+    function searchFood() {
+      const query = document.getElementById("searchBar").value.toLowerCase();
+      document.querySelectorAll(".food-card").forEach(card => {
+        const name = card.dataset.name.toLowerCase();
+        card.style.display = name.includes(query) ? "block" : "none";
+      });
+    }
+
+    // Scroll-to-top logic
+    const scrollBtn = document.getElementById("scrollTopBtn");
+    window.onscroll = function() {
+      if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
+        scrollBtn.style.display = "block";
+      } else {
+        scrollBtn.style.display = "none";
+      }
+    };
+    scrollBtn.addEventListener("click", () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  </script>
+</body>
+</html>

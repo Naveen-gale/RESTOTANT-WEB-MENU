@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>karanatak F C| Home</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+  <!-- 🌟 HEADER (same on all pages) -->
+   {% include 'header.html' %}
+
+  <!-- 🍗 DYNAMIC MAIN BODY SECTION -->
+  <main class="main-section">
+    <div class="overlay"></div>
+    <div class="content">
+      <h1 id="heroTitle">Hot & Crispy Chicken 🍗</h1>
+      <p id="heroDesc">Taste the crunch, the spice, and the joy — just like KFC, but Karnataka style!</p>
+      <a href="/menu" class="btn">Explore Menu</a>
+    </div>
+  </main>
+
+  <!-- 👣 FOOTER -->
+  <footer>
+    <p>© 2025 Karnataka F.C | Developed by <b>Naveen</b></p>
+  </footer>
+
+  <script>
+    // === NAVBAR TOGGLE ===
+    function toggleMenu() {
+      document.querySelector('.nav-links').classList.toggle('show');
+    }
+
+    // === BODY DYNAMIC BACKGROUND (KFC Style) ===
+    const kfcImages = [
+      { 
+        title: "🔥 Hot & Crispy Chicken", 
+        desc: "Spicy, crunchy, and juicy — Karnataka’s version of KFC perfection.", 
+        img: "https://source.unsplash.com/1600x900/?fried-chicken,kfc"
+      },
+      { 
+        title: "🍔 Zinger Burgers", 
+        desc: "Crispy chicken, melted cheese, and that secret sauce — irresistible combo!", 
+        img: "https://source.unsplash.com/1600x900/?burger,fastfood"
+      },
+      { 
+        title: "🍟 Fries & Combos", 
+        desc: "Golden fries and cool drinks — perfect for every meal.", 
+        img: "https://source.unsplash.com/1600x900/?french-fries,meal"
+      },
+      { 
+        title: "🍗 Grilled Specials", 
+        desc: "Tender, smoky, grilled chicken made with Indian spices.", 
+        img: "https://source.unsplash.com/1600x900/?grilled-chicken"
+      },
+      { 
+        title: "🥤 Drinks & Desserts", 
+        desc: "Cool off with shakes, ice creams, and refreshing beverages.", 
+        img: "https://source.unsplash.com/1600x900/?milkshake,dessert"
+      }
+    ];
+
+    let currentIndex = 0;
+    const mainSection = document.querySelector('.main-section');
+    const heroTitle = document.getElementById('heroTitle');
+    const heroDesc = document.getElementById('heroDesc');
+
+    function changeBackground() {
+      currentIndex = (currentIndex + 1) % kfcImages.length;
+      mainSection.style.backgroundImage = `url('${kfcImages[currentIndex].img}')`;
+      heroTitle.textContent = kfcImages[currentIndex].title;
+      heroDesc.textContent = kfcImages[currentIndex].desc;
+    }
+
+    setInterval(changeBackground, 6000); // every 5 seconds
+  </script>
+
+</body>
+</html>

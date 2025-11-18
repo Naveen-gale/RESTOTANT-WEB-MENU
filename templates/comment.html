@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Comments | Karnataka F.C</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/comment.css') }}">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+
+<body>
+
+  <!-- HEADER -->
+  <header class="navbar">
+    <div class="logo">
+      <span class="emoji">🍴</span>
+      <span class="name">Karnataka <b>F C</b></span>
+    </div>
+    <nav class="nav-links">
+      <a href="/">Home</a>
+      <a href="/menu">Menu</a>
+      <a href="/contact">Contact</a>
+    </nav>
+    <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+  </header>
+
+  <!-- COMMENT PAGE -->
+  <main class="comment-page">
+    <h2>Rate & Review</h2>
+    <h3>{{ item }}</h3>
+
+    <p class="avg-display">
+      Average Rating:
+      {% if avg_rating > 0 %}
+      ⭐ {{ avg_rating }}
+      {% else %}
+      No ratings yet
+      {% endif %}
+    </p>
+
+    <!-- COMMENT FORM -->
+    <form id="commentForm">
+      <input type="text" id="name" placeholder="Your Name" required>
+      <textarea id="comment" placeholder="Write your comment..." required></textarea>
+
+      <div class="rating-stars">
+        <span data-val="1">★</span>
+        <span data-val="2">★</span>
+        <span data-val="3">★</span>
+        <span data-val="4">★</span>
+        <span data-val="5">★</span>
+      </div>
+
+      <button type="submit" class="submit-btn">Submit</button>
+    </form>
+
+    <!-- POPUP -->
+    <div id="popup" class="popup">
+      <div class="popup-content">
+        <h3>✅ Thank You!</h3>
+        <p>Your rating and comment have been recorded successfully.</p>
+        <button onclick="closePopup()">OK</button>
+      </div>
+    </div>
+
+    <!-- PREVIOUS COMMENTS -->
+    <section class="comment-section">
+      <h3>Customer Comments</h3>
+
+      <div class="comment-scroll">
+        {% if comments %}
+          {% for c in comments %}
+            <div class="comment-card">
+              <p><b>{{ c.name }}</b> — ⭐ {{ c.rating }}</p>
+              <p>{{ c.comment }}</p>
+            </div>
+          {% endfor %}
+        {% else %}
+          <p class="no-comments">No comments yet. Be the first to review!</p>
+        {% endif %}
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>© 2025 Karnataka F.C | Developed by Naveen</p>
+  </footer>
+
+  <!-- JS -->
+  <script>
+    const stars = document.querySelectorAll('.rating-stars span');
+    let selectedRating = 0;
+
+    stars.forEach(star => {
+      star.addEventListener('click', () => {
+        selectedRating = parseInt(star.dataset.val);
+        stars.forEach(s => s.classList.toggle('active', parseInt(s.dataset.val) <= selectedRating));
+      });
+    });
+
+    const popup = document.getElementById("popup");
+
+    document.getElementById("commentForm").addEventListener("submit", async e => {
+      e.preventDefault();
+
+      const data = {
+        item: "{{ item }}",
+        name: document.getElementById("name").value,
+        comment: document.getElementById("comment").value,
+        rating: selectedRating || 0
+      };
+
+      const res = await fetch("/submit_comment", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      });
+
+      const json = await res.json();
+      if (json.success) {
+        document.querySelector(".avg-display").innerHTML = `⭐ ${json.avg}`;
+        popup.style.display = "flex";
+      }
+    });
+
+    function closePopup() {
+      popup.style.display = "none";
+      window.location.reload();
+    }
+
+    function toggleMenu() {
+      document.querySelector('.nav-links').classList.toggle('show');
+    }
+  </script>
+</body>
+</html>

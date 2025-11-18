@@ -1,0 +1,328 @@
+/* RESET */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* BODY */
+body {
+  font-family: 'Poppins', sans-serif;
+  background: #fffaf5;
+  color: #333;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ======================
+   NAVBAR
+====================== */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(90deg, #e67e22, #d35400);
+  padding: 12px 24px;
+  color: white;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.12);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.25rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.nav-links {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+}
+
+.nav-links a {
+  color: white;
+  text-decoration: none;
+  font-weight: 600;
+  position: relative;
+  padding: 6px 4px;
+}
+
+.nav-links a::after {
+  content: "";
+  position: absolute;
+  bottom: -6px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: white;
+  transition: width 0.25s ease;
+}
+
+.nav-links a:hover::after,
+.nav-links a.active::after {
+  width: 100%;
+}
+
+.menu-toggle {
+  display: none;
+  font-size: 1.8rem;
+  cursor: pointer;
+  color: white;
+  background: transparent;
+  border: none;
+}
+
+/* ======================
+   INTRO SECTION
+====================== */
+.intro {
+  text-align: center;
+  padding: 28px 16px;
+  background: #fff2e6;
+}
+
+.intro h2 {
+  font-size: 1.9rem;
+  color: #d35400;
+}
+
+.intro p {
+  margin-top: 8px;
+  color: #444;
+  font-size: 1rem;
+}
+
+#searchBar {
+  width: 80%;
+  max-width: 420px;
+  padding: 10px 14px;
+  margin-top: 12px;
+  border-radius: 24px;
+  border: 1px solid #ccc;
+  outline: none;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+#searchBar:focus {
+  border-color: #e67e22;
+  box-shadow: 0 0 5px rgba(230,126,34,0.4);
+}
+
+/* ======================
+   MENU SECTIONS
+====================== */
+.menu-section {
+  margin: 36px auto;
+  max-width: 1200px;
+  padding: 10px 20px;
+}
+
+.category-title {
+  background: #f9e0c0;
+  color: #d35400;
+  padding: 10px;
+  text-align: center;
+  font-size: 1.15rem;
+  border-radius: 6px;
+  margin-bottom: 16px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+/* ======================
+   FOOD GRID
+====================== */
+.food-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 18px;
+  align-items: start;
+}
+
+.food-card {
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  transition: transform .18s ease, box-shadow .18s ease;
+  width: 100%;
+  max-width: 300px;
+  margin: 0 auto;
+}
+
+.food-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+}
+
+.img-container img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  display: block;
+  border-bottom: 1px solid #f2f2f2;
+}
+
+.details {
+  padding: 10px;
+  text-align: center;
+}
+
+.details h4 {
+  color: #e67e22;
+  font-size: 1rem;
+  margin-bottom: 6px;
+}
+
+.details p {
+  font-size: .9rem;
+  color: #555;
+  margin: 4px 0;
+}
+
+.price {
+  font-weight: 700;
+  margin-top: 6px;
+  color: #333;
+}
+
+/* ======================
+   ADD COMMENT BUTTON
+====================== */
+.comment-btn {
+  margin-top: 10px;
+  background: linear-gradient(135deg, #e67e22, #d35400);
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.12);
+}
+
+.comment-btn i {
+  margin-right: 6px;
+}
+
+.comment-btn:hover {
+  background: #d35400;
+  transform: scale(1.05);
+  box-shadow: 0 5px 14px rgba(0,0,0,0.18);
+}
+
+/* ======================
+   FOOTER
+====================== */
+footer {
+  background: #f2f2f2;
+  text-align: center;
+  padding: 16px;
+  color: #555;
+  margin-top: 40px;
+  font-size: 0.9rem;
+}
+
+/* ======================
+   SCROLL TO TOP
+====================== */
+#scrollTopBtn {
+  display: none;
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 1100;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: none;
+  background: linear-gradient(135deg, #e67e22, #d35400);
+  color: #fff;
+  font-size: 18px;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.18);
+  transition: all 0.3s ease;
+}
+
+#scrollTopBtn:hover {
+  transform: scale(1.1);
+  background: #d35400;
+  box-shadow: 0 8px 22px rgba(0,0,0,0.25);
+}
+
+/* ======================
+   RESPONSIVE DESIGN
+====================== */
+
+/* Large Desktops */
+@media (min-width: 1200px) {
+  .food-list {
+    grid-template-columns: repeat(5, 1fr);
+    gap: 20px;
+  }
+}
+
+/* Tablets */
+@media (min-width: 768px) and (max-width: 1199px) {
+  .food-list {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+  }
+}
+
+/* Mobile Phones */
+@media (max-width: 767px) {
+  .menu-toggle {
+    display: block;
+    z-index: 1200;
+  }
+
+  .nav-links {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: 56px;
+    right: 12px;
+    width: 220px;
+    background: rgba(211, 84, 0, 0.98);
+    border-radius: 10px;
+    padding: 10px 0;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  }
+
+  .nav-links.show {
+    display: flex;
+  }
+
+  .nav-links a {
+    padding: 10px 12px;
+    width: 100%;
+    text-align: center;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .img-container img {
+    height: 120px;
+  }
+
+  .food-list {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+}
+
+
+.avg-rating {
+  font-size: 0.9rem;
+  color: #e67e22;
+  font-weight: 600;
+  margin-top: 6px;
+}

@@ -1,0 +1,21 @@
+
+<header class="navbar">
+  <div class="logo">
+    <span class="emoji">🍴</span>
+    <span class="name">karanatak  <b>F C</b></span>
+  </div>
+  <nav class="nav-links">
+    <a href="/" class="{% if active_page == 'home' %}active{% endif %}">Home</a>
+    <a href="/menu" class="{% if active_page == 'menu' %}active{% endif %}">Menu</a>
+    <a href="/contact" class="{% if active_page == 'contact' %}active{% endif %}">Contact</a>
+  </nav>
+
+  <!-- Mobile Menu Icon -->
+  <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+</header>
+
+<script>
+  function toggleMenu() {
+    document.querySelector('.nav-links').classList.toggle('show');
+  }
+</script>
