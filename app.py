@@ -11,34 +11,36 @@ app = Flask(__name__)
 # Load Firebase private key
 
 
-# --- FIREBASE SETUP USING ENV VARIABLE ---
-import os
-import json
-import tempfile
-import firebase_admin
-from firebase_admin import credentials, firestore, db
+# --- FIREBASE SETUP (Robust) ---
+cred = None
+# 1. Try Env Var (JSON)
+firebase_key_env = os.environ.get("FIREBASE_KEY")
+if firebase_key_env:
+    try:
+        cred_json = json.loads(firebase_key_env)
+        cred = credentials.Certificate(cred_json)
+    except Exception as e:
+        print(f"Invalid FIREBASE_KEY env var: {e}")
 
-# --- FIREBASE USING ENV VARIABLE ---
-firebase_json = os.environ.get("FIREBASE_KEY")
+# 2. Try File Paths (Local & Render Secret)
+if not cred:
+    possible_keys = ["firebase_key.json", "/etc/secrets/firebase_key.json"]
+    for path in possible_keys:
+        if os.path.exists(path):
+            cred = credentials.Certificate(path)
+            break
 
-if not firebase_json:
-    raise Exception("FIREBASE_KEY not found in environment variables")
+if not cred:
+     # Fail fast on Render
+    if os.getenv("RENDER"):
+        raise Exception("🔥 FIREBASE CREDENTIALS MISSING! Add 'firebase_key.json' as a Secret File locally or on Render.")
+    print("WARNING: Firebase not connected. Check firebase_key.json")
+else:
+    # URL might be in env or hardcoded/default
+    db_url = os.environ.get("REALTIME_DB_URL", "https://kfc-9a67b-default-rtdb.asia-southeast1.firebasedatabase.app/")
+    firebase_admin.initialize_app(cred, {"databaseURL": db_url})
 
-# Load JSON string as dict
-firebase_dict = json.loads(firebase_json)
-
-# Create a temporary file for firebase key
-with tempfile.NamedTemporaryFile(delete=False, suffix=".json", mode="w") as temp:
-    json.dump(firebase_dict, temp)
-    temp_key_path = temp.name
-
-cred = credentials.Certificate(temp_key_path)
-
-firebase_admin.initialize_app(cred, {
-    "databaseURL": os.environ.get("REALTIME_DB_URL")
-})
-
-firestore_db = firestore.client()
+firestore_db = firestore.client() if firebase_admin._apps else None
 
 
 # --- GMAIL SETTINGS FROM ENV VARIABLES ---
